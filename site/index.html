@@ -246,7 +246,10 @@
     el('updated').textContent = 'Last updated ' + day(d.generated) + '.';
     strip(d);
     document.querySelectorAll('footer a[href^="http"]').forEach(function (a) { if (a.target !== '_blank') ext(a); });
-    ['q', 'keyword', 'discipline', 'source', 'venue', 'days'].forEach(function (id) { el(id).addEventListener('input', changed); });
+    ['q', 'keyword', 'discipline', 'source', 'days'].forEach(function (id) { el(id).addEventListener('input', changed); });
+    // Choosing one journal (or collection or server) shows its whole year, unless the reader already picked a time range.
+    var daysPicked = false; el('days').addEventListener('input', function () { daysPicked = true; });
+    el('venue').addEventListener('input', function () { if (el('venue').value && !daysPicked) el('days').value = ''; changed(); });
     el('more').addEventListener('click', function () { state.shown += PAGE; render(); });
     render();
   }).catch(function () { el('count').textContent = 'The list could not be loaded.'; });
