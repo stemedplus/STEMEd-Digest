@@ -83,7 +83,10 @@ links to the original work.
 Journal articles, preprints, and dissertations stay listed for 12 months, about one volume
 year even for quarterly journals. STEMEd+ Commons works stay listed permanently. A journal or
 source added to the list gets its last 12 months on the next run; after that, each daily run
-looks back 14 days.
+looks back 14 days. `items.json` records, per journal, the date its listing is complete from
+(`covered_since`). A journal without that record (newly added, a failed read, or a gap of more
+than 14 days since the last run) is read for the full 12 months again, so every journal shows a
+whole year, not just the weeks since it was first listed.
 
 Some publishers re-register old issues with Crossref (in 2026, *Journal of Nursing Education*
 re-registered articles back to 1962, and *American Journal of Pharmaceutical Education* back to

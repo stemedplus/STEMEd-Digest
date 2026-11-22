@@ -315,20 +315,44 @@ class BuildTests(unittest.TestCase):
         self.assertNotIn("doi:10.1/dropped", ids)
         self.assertIn("kcworks:agonly-0001", ids)      # Commons works are never dropped for age
 
-    def test_new_journals_get_the_whole_window_and_listed_ones_a_short_lookback(self):
+    def _asked(self, previous_payload, fail=()):
         asked = {}
         def record(journal, since):
             asked[journal["name"]] = since
+            if journal["name"] in fail:
+                raise RuntimeError("Crossref is down")
             return []
-        listed = Item(id="doi:10.1/a", source="journal", title="A", authors=[], venue="Medical Education", url="u",
-                      added="2026-10-01T00:00:00Z")
         with tempfile.TemporaryDirectory() as tmp:
             prev = Path(tmp) / "prev.json"
-            prev.write_text(json.dumps({"items": [listed.to_dict()]}), encoding="utf-8")
+            prev.write_text(json.dumps(previous_payload), encoding="utf-8")
             with mock.patch.object(commons, "get_json", side_effect=fake_kc_get):
-                build.run(Path(tmp) / "out", str(prev), NOW, fetch_journals=record)
-        self.assertEqual(asked["Medical Education"], "2026-10-23")      # 14-day lookback
+                payload = build.run(Path(tmp) / "out", str(prev), NOW, fetch_journals=record, allow_errors=True)
+        return asked, payload
+
+    def test_covered_journals_get_a_short_lookback_and_others_the_whole_window(self):
+        listed = Item(id="doi:10.1/a", source="journal", title="A", authors=[], venue="Medical Education", url="u",
+                      added="2026-10-01T00:00:00Z")
+        asked, payload = self._asked({"generated": "2026-11-05T00:00:00Z", "items": [listed.to_dict()],
+                                      "covered_since": {"Medical Education": "2025-11-06"}})
+        self.assertEqual(asked["Medical Education"], "2026-10-23")      # covered: 14-day lookback
         self.assertEqual(asked["Medical Teacher"], "2025-11-06")        # never listed: full 365 days
+        self.assertEqual(payload["covered_since"]["Medical Teacher"], "2025-11-06")
+
+    def test_listed_but_not_covered_journal_is_backfilled(self):
+        # Listed before coverage was recorded (only its last weeks are there): read the whole year once.
+        listed = Item(id="doi:10.1/a", source="journal", title="A", authors=[], venue="Medical Education", url="u",
+                      added="2026-10-26T00:00:00Z")
+        asked, payload = self._asked({"generated": "2026-11-05T00:00:00Z", "items": [listed.to_dict()]})
+        self.assertEqual(asked["Medical Education"], "2025-11-06")
+        self.assertEqual(payload["covered_since"]["Medical Education"], "2025-11-06")
+
+    def test_failed_or_stale_reads_are_backfilled_next_time(self):
+        asked, payload = self._asked({"generated": "2026-11-05T00:00:00Z",
+                                      "covered_since": {"Medical Education": "2025-11-06"}}, fail={"Medical Education"})
+        self.assertNotIn("Medical Education", payload["covered_since"])
+        asked, _ = self._asked({"generated": "2026-10-01T00:00:00Z",          # last run long ago: maybe a gap
+                                "covered_since": {"Medical Education": "2025-11-06"}})
+        self.assertEqual(asked["Medical Education"], "2025-11-06")
 
     def test_failed_source_stops_the_build_unless_allowed(self):
         def broken(journal, since):

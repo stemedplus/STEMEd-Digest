@@ -31,11 +31,11 @@ def load_config(name: str) -> dict:
     return json.loads((ROOT / "config" / name).read_text(encoding="utf-8"))
 
 
-def load_previous(previous: Optional[str]) -> List[Item]:
+def load_previous_data(previous: Optional[str]) -> dict:
     """Items from the last published items.json (a URL or a local path). A missing or
     unreadable file just means a fresh start, e.g. on the very first run."""
     if not previous:
-        return []
+        return {}
     try:
         if previous.startswith(("http://", "https://")):
             url = previous.rstrip("/") + "/items.json"
@@ -43,10 +43,14 @@ def load_previous(previous: Optional[str]) -> List[Item]:
                 data = json.load(resp)
         else:
             data = json.loads(Path(previous).read_text(encoding="utf-8"))
-        return [Item.from_dict(d) for d in data.get("items", [])]
+        return data if isinstance(data, dict) else {}
     except Exception as exc:  # noqa: BLE001 - any failure means "start fresh"
         print(f"Note: no previous items loaded from {previous} ({exc}).")
-        return []
+        return {}
+
+
+def load_previous(previous: Optional[str]) -> List[Item]:
+    return [Item.from_dict(d) for d in load_previous_data(previous).get("items", [])]
 
 
 def merge(previous: List[Item], fresh: List[Item], now: dt.datetime, keep_days: int) -> List[Item]:
@@ -74,21 +78,32 @@ def run(out: Path, previous: Optional[str], now: dt.datetime, fetch_journals=cro
     fetch_dissertations = fetch_dissertations or dissertations.fetch_dissertations
     site, journals, commons_cfg = load_config("site.json"), load_config("journals.json"), load_config("commons.json")
     servers, diss_cfg = load_config("preprints.json"), load_config("dissertations.json")
-    previous_items = load_previous(previous)
+    previous_data = load_previous_data(previous)
+    previous_items = [Item.from_dict(d) for d in previous_data.get("items", [])]
+    # covered_since: for each journal, the date its listing is complete from. A journal without it (newly
+    # added, a failed read, or listed before this was recorded) is read for the whole keep_days window, so
+    # every journal shows a full year, not just the weeks since it was first listed.
+    covered = dict(previous_data.get("covered_since") or {})
+    last_run = str(previous_data.get("generated") or "")
+    if last_run < (now - dt.timedelta(days=site["lookback_days"])).strftime("%Y-%m-%dT%H:%M:%SZ"):
+        covered = {}  # the last run is older than the lookback, so there may be a gap: read the whole window
     listed = {i.venue for i in previous_items if i.source in ("journal", "preprint")}
     listed |= {i.source for i in previous_items}
     recent = (now - dt.timedelta(days=site["lookback_days"])).strftime("%Y-%m-%d")
     backfill = (now - dt.timedelta(days=site["keep_days"])).strftime("%Y-%m-%d")
     fresh: List[Item] = []
     status = []
+    coverage: Dict[str, str] = {}
     for j in journals["journals"]:
-        # A journal with nothing listed yet (first run, or newly added) gets the whole window.
-        since = recent if j["name"] in listed else backfill
+        complete = covered.get(j["name"])
+        since = recent if complete else backfill
         try:
             got = fetch_journals(j, since)
             fresh += got
-            status.append({"source": j["name"], "ok": True, "new": len(got)})
+            coverage[j["name"]] = max(complete or backfill, backfill)
+            status.append({"source": j["name"], "ok": True, "new": len(got), "since": since})
         except Exception as exc:  # noqa: BLE001
+            # Not recorded as covered, so the next run reads the whole window again and fills any gap.
             status.append({"source": j["name"], "ok": False, "error": str(exc)[:200]})
     # Preprint servers and dissertations, also backfilled the first time they run.
     others = [
@@ -136,6 +151,7 @@ def run(out: Path, previous: Optional[str], now: dt.datetime, fetch_journals=cro
         "preprint_servers": [{"name": v["name"], "url": v["url"]} for k, v in servers.items() if not k.startswith("_")],
         "dissertations": {"name": diss_cfg["name"], "url": diss_cfg["url"]},
         "status": status,
+        "covered_since": coverage,
         "items": [i.to_dict() for i in items],
     }
     (out / "items.json").write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
