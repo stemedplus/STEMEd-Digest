@@ -339,7 +339,7 @@
       "name": "ACM SIGCSE Technical Symposium",
       "url": "https://sigcse.org/events/symposia/",
       "publisher": "ACM Special Interest Group on Computer Science Education",
-      "disciplines": ["Engineering"],
+      "disciplines": ["Computing"],
       "kind": "proceedings",
       "levels": ["K-12", "Undergraduate"],
       "scope": "Computing education: experience reports, research papers, and curricular papers. Experience reports are a good fit for a first classroom innovation.",

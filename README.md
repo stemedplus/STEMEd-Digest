@@ -165,6 +165,6 @@ that happens the site keeps its earlier dissertation listings and shows a notice
 ## License
 
 Code: MIT. The disciplines (labels, definitions, and matching words) come from the STEMEd+
-discipline list shared across STEMEd+ Commons, kept in the [HuMeta profile](https://github.com/stemedplus/humeta-profile)
+discipline list shared across STEMEd+ Commons, kept in [stemedplus-theme](https://github.com/stemedplus/stemedplus-theme)
 (`stemedplus_disciplines.json`) and stored here as
 `stemed_digest/stemedplus_disciplines.json`; each build refreshes the stored copy.

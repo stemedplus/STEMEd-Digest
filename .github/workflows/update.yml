@@ -36,7 +36,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Refresh shared disciplines from HuMeta
+      - name: Refresh shared disciplines from stemedplus-theme
         run: python -m stemed_digest.stemedplus_disciplines --refresh
       - name: Refresh the shared STEMEd+ look
         continue-on-error: true

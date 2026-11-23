@@ -29,8 +29,9 @@ NOT_STEM = re.compile(
 WORD_DISCIPLINES = (
     ("Mathematics", re.compile(r"\bmaths?\b|\bmathematical\b|\bgeometr(?:y|ic|ical)\b|\balgebra\w*|\bcalculus\b"
                                r"|\bfractions?\b|\bnumeracy\b|\barithmetic\b|\bstatistical\b|\bdata science\b", re.IGNORECASE)),
-    ("Engineering", re.compile(r"\bcomputer science\b|\bcomputing\b|\bcomputational thinking\b|\bprogramming\b"
-                               r"|\bcoding\b|\brobotics\b", re.IGNORECASE)),
+    ("Computing", re.compile(r"\bcomputer science\b|\bcomputing\b|\bcomputational thinking\b|\bprogramming\b"
+                             r"|\bcoding\b", re.IGNORECASE)),
+    ("Engineering", re.compile(r"\brobotics\b", re.IGNORECASE)),
     ("Health Education", re.compile(r"\bbiomedical\b|\bclinical\b|\bpatients?\b", re.IGNORECASE)),
 )
 STEM_WORDS = re.compile(r"\b(?-i:STEM|STEAM|STEMM)\b|\bsciences?\b|\bscientific\b|\bscientists?\b|\bocean literacy\b",
