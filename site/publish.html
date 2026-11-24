@@ -103,7 +103,7 @@
     <div><label for="q">Search</label><input id="q" type="search" placeholder="Journal, publisher, or topic" autocomplete="off"></div>
     <div><label for="disc">Discipline</label><select id="disc"><option value="">All</option></select></div>
     <div><label for="kind">Kind of venue</label><select id="kind"><option value="">All</option></select></div>
-    <div><label for="access">Access and fees</label><select id="access"><option value="">All</option><option value="free">No author fee</option></select></div>
+    <div><label for="access">Access and fees</label><select id="access"><option value="">All</option><option value="free">No author fee (confirmed)</option></select></div>
     <div class="chk"><input type="checkbox" id="first"><label for="first" style="margin:0;color:var(--ink)">Good first venues</label></div>
   </div>
   <p id="count" aria-live="polite"></p>
@@ -158,7 +158,6 @@
   function el(id) { return document.getElementById(id); }
   function node(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
   var D = null;
-  var FREE = { diamond: 1, hybrid: 1, subscription: 1, proceedings: 1 };
   function month(m) { var p = m.split('-'); return ['Jan.', 'Feb.', 'March', 'April', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.'][+p[1] - 1] + ' ' + p[0]; }
   var NOTES = {
     teaching: 'Teaching innovations, classroom materials, and the scholarship of teaching and learning.',
@@ -170,7 +169,7 @@
     if (v.scope) li.appendChild(node('p', 'scope', v.scope));
     var dl = node('dl', 'facts');
     [['Disciplines', v.disciplines.length ? v.disciplines.join(', ') : 'All STEM+'], ['Levels', v.levels && v.levels.join(', ')], ['Review', v.review],
-     ['Access', v.access && D.access[v.access]], ['Author fees', v.fees && v.fees + (v.checked ? ' (confirmed ' + month(v.checked) + ')' : '')]].forEach(function (r) {
+     ['Access', v.access && D.access[v.access]], ['Author fees', v.fees && v.fees + (v.checked ? ' (confirmed ' + month(v.checked) + ')' : ' (not yet confirmed: check the journal’s own page before you rely on this)')]].forEach(function (r) {
       if (!r[1]) return;
       dl.appendChild(node('dt', '', r[0])); dl.appendChild(node('dd', '', r[1]));
     });
@@ -190,7 +189,7 @@
       return (!sec || v.sections.indexOf(sec) !== -1) &&
         (!q || (v.name + ' ' + v.publisher + ' ' + (v.scope || '')).toLowerCase().indexOf(q) !== -1) &&
         (!disc || (disc === '*' ? !v.disciplines.length : v.disciplines.indexOf(disc) !== -1 || !v.disciplines.length)) &&
-        (!kind || v.kind === kind) && (!acc || (acc === 'free' ? FREE[v.access] : v.access === acc)) && (!first || v.first_timer);
+        (!kind || v.kind === kind) && (!acc || (acc === 'free' ? v.author_fee === false : v.access === acc)) && (!first || v.first_timer);
     });
     el('count').textContent = shown.length + (shown.length === 1 ? ' venue' : ' venues') + (shown.length < D.venues.length ? ' of ' + D.venues.length : '');
     var list = el('list'); list.textContent = '';

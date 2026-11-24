@@ -26,6 +26,29 @@ class VenueTests(unittest.TestCase):
         self.assertIn("Astrology", msg)
         self.assertIn("YYYY-MM", msg)
 
+    def test_author_fee_rules(self):
+        data = venues.load()
+        bad = copy.deepcopy(data)
+        by_name = {v["name"]: v for v in bad["venues"]}
+        by_name["PRIMUS"]["author_fee"] = False          # "free" without a checked date
+        by_name["CBE—Life Sciences Education"]["author_fee"] = False   # gold but "free"
+        by_name["College Teaching"]["author_fee"] = "no"
+        with self.assertRaises(ValueError) as e:
+            venues.check(bad)
+        msg = str(e.exception)
+        self.assertIn("needs a checked date", msg)
+        self.assertIn("use diamond", msg)
+        self.assertIn("true or false", msg)
+
+    def test_page_charges_are_not_listed_as_free(self):
+        by_name = {v["name"]: v for v in venues.load()["venues"]}
+        for name in ("Journal of Geoscience Education", "The American Biology Teacher"):
+            self.assertIs(by_name[name]["author_fee"], True, name)
+            self.assertIn("$100 per page", by_name[name]["fees"])
+        page = (venues.ROOT / "site" / "publish.html").read_text()
+        self.assertIn("v.author_fee === false", page)
+        self.assertNotIn("Free to publish", (venues.ROOT / "config" / "venues.json").read_text())
+
     def test_write_publishes_venues_json(self):
         with tempfile.TemporaryDirectory() as d:
             venues.write(Path(d))

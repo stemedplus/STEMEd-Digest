@@ -1,5 +1,5 @@
 {
-  "_about": "Where to publish: curated venues for teaching innovations, classroom-ready materials, and scholarship of teaching and learning (SoTL) in STEM+. The page also lists every journal the Digest follows (config/journals.json); stemed_digest/venues.py combines the two into the Teaching & SoTL and Research sections, and if in doubt, a journal is listed in both, and that is the default for any journal added later. Only practitioner magazines and lesson journals (kind practice or materials), the journals named in teaching_only, and the journals named in research_only or covering only research_only_disciplines are kept to one section. digest_names: the Digest journal names that a combined entry stands for. sections: set it on a venue to override the rules (teaching, research, or both). 'access' is one of: diamond (free to publish and free to read), gold (free to read; authors pay an article fee), hybrid (free to publish; open access optional for a fee), subscription (free to publish; readers need a subscription or membership), proceedings (free to read; you present at the conference and pay registration). 'checked' is the month the access and fee details were last confirmed from the journal, DOAJ, or the society; venues without it need a look at the journal's own page before you rely on the fee.",
+  "_about": "Where to publish: curated venues for teaching innovations, classroom-ready materials, and scholarship of teaching and learning (SoTL) in STEM+. The page also lists every journal the Digest follows (config/journals.json); stemed_digest/venues.py combines the two into the Teaching & SoTL and Research sections, and if in doubt, a journal is listed in both, and that is the default for any journal added later. Only practitioner magazines and lesson journals (kind practice or materials), the journals named in teaching_only, and the journals named in research_only or covering only research_only_disciplines are kept to one section. digest_names: the Digest journal names that a combined entry stands for. sections: set it on a venue to override the rules (teaching, research, or both). 'access' is one of: diamond (free to publish and free to read), gold (free to read; authors pay an article fee), hybrid (subscription to read; authors can pay to make an article open access), subscription (readers need a subscription or membership), proceedings (free to read; you present at the conference and pay registration). 'author_fee' is true when publishing can cost authors something even without choosing open access (page charges, article fees, membership requirements), false when it is confirmed free; leave it out when unknown. The 'No author fee' filter shows only venues marked false. 'checked' is the month the access and fee details were last confirmed from the journal, DOAJ, or the society; venues without it need a look at the journal's own page before you rely on the fee.",
   "kinds": {
     "research": "Research and SoTL journal",
     "practice": "Practitioner journal or magazine",
@@ -11,8 +11,8 @@
   "access": {
     "diamond": "Diamond open access: free to publish, free to read",
     "gold": "Open access with an article fee",
-    "hybrid": "Free to publish; open access optional for a fee",
-    "subscription": "Free to publish; subscription or membership to read",
+    "hybrid": "Subscription to read; open access optional for a fee",
+    "subscription": "Subscription or membership to read",
     "proceedings": "Free to read; requires presenting at the conference"
   },
   "teaching_only": ["Connected Science Learning"],
@@ -28,9 +28,10 @@
       "levels": ["Undergraduate", "Graduate"],
       "scope": "SoTL in higher education across disciplines, institutions, and countries. Takes research articles, shorter notes, and essays on SoTL itself.",
       "review": "Peer reviewed",
+      "first_timer": true,
       "access": "diamond",
       "fees": "None",
-      "first_timer": true,
+      "author_fee": false,
       "checked": "2026-11"
     },
     {
@@ -42,9 +43,11 @@
       "levels": ["Undergraduate", "Graduate"],
       "scope": "Empirical studies, case studies, and reflective essays on college teaching. Readers come from every discipline, so write for people outside your field.",
       "review": "Peer reviewed",
+      "first_timer": true,
       "access": "diamond",
-      "fees": "None listed; confirm on the journal's submission page",
-      "first_timer": true
+      "fees": "None (DOAJ)",
+      "author_fee": false,
+      "checked": "2026-11"
     },
     {
       "name": "College Teaching",
@@ -70,7 +73,9 @@
       "scope": "Research on teaching and learning across STEM fields and on integrated STEM education.",
       "review": "Peer reviewed",
       "access": "gold",
-      "fees": "Article fee; check the journal's fees page for the current amount and waivers"
+      "fees": "Up to $2,190 (DOAJ)",
+      "author_fee": true,
+      "checked": "2026-11"
     },
     {
       "name": "Journal of College Science Teaching",
@@ -82,9 +87,11 @@
       "levels": ["Undergraduate"],
       "scope": "College science teaching: classroom innovations with evidence that they work, written for instructors.",
       "review": "Peer reviewed",
+      "first_timer": true,
       "access": "hybrid",
       "fees": "None to publish; optional open-access fee",
-      "first_timer": true
+      "author_fee": false,
+      "checked": "2026-11"
     },
     {
       "name": "CBE—Life Sciences Education",
@@ -97,6 +104,7 @@
       "review": "Peer reviewed",
       "access": "gold",
       "fees": "Article publication charge; waivers and reductions on request",
+      "author_fee": true,
       "checked": "2026-11"
     },
     {
@@ -108,9 +116,10 @@
       "levels": ["K-12", "Undergraduate", "Graduate"],
       "scope": "Research articles plus short, ready-to-adopt lessons and activities (Tips and Tools) for biology courses.",
       "review": "Peer reviewed",
+      "first_timer": true,
       "access": "gold",
       "fees": "Up to $1,700 (DOAJ)",
-      "first_timer": true,
+      "author_fee": true,
       "checked": "2026-11"
     },
     {
@@ -122,9 +131,10 @@
       "levels": ["Undergraduate"],
       "scope": "Complete, student-centered lessons for college biology and physics, aligned to society learning goals. You publish the lesson itself.",
       "review": "Peer reviewed",
+      "first_timer": true,
       "access": "gold",
-      "fees": "Free to read; check the journal's author page for any publication fee",
-      "first_timer": true
+      "fees": "Publication fee, reported as $400; confirm on CourseSource's For Authors page",
+      "author_fee": true
     },
     {
       "name": "The American Biology Teacher",
@@ -135,9 +145,11 @@
       "levels": ["K-12", "Undergraduate"],
       "scope": "Classroom activities, labs, and teaching ideas for high school and introductory college biology.",
       "review": "Peer reviewed",
+      "first_timer": true,
       "access": "subscription",
-      "fees": "None to publish",
-      "first_timer": true
+      "fees": "$100 per page unless every author is a current NABT member",
+      "author_fee": true,
+      "checked": "2026-11"
     },
     {
       "name": "Advances in Physiology Education",
@@ -148,9 +160,11 @@
       "levels": ["Undergraduate", "Graduate"],
       "scope": "Physiology and life-science teaching: research, innovative activities (Illuminations, How We Teach), and sourcebook pieces.",
       "review": "Peer reviewed",
-      "access": "hybrid",
-      "fees": "Check the journal's author page for page charges and the open-access option",
-      "first_timer": true
+      "first_timer": true,
+      "access": "diamond",
+      "fees": "None (DOAJ)",
+      "author_fee": false,
+      "checked": "2026-11"
     },
     {
       "name": "Biochemistry and Molecular Biology Education",
@@ -200,7 +214,9 @@
       "scope": "Geoscience education research and evidence-based teaching practice, including curriculum and instruction papers.",
       "review": "Peer reviewed",
       "access": "hybrid",
-      "fees": "None to publish; optional open-access fee"
+      "fees": "$100 per page; authors without grant or institutional funds can ask for a reduction or waiver. Optional open-access fee on top.",
+      "author_fee": true,
+      "checked": "2026-11"
     },
     {
       "name": "In the Trenches",
@@ -226,6 +242,7 @@
       "review": "Peer reviewed",
       "access": "gold",
       "fees": "Up to $2,205 (DOAJ); fee waivers available on request",
+      "author_fee": true,
       "checked": "2026-11"
     },
     {
@@ -252,7 +269,9 @@
       "scope": "Physics as taught at the college level: new ways to explain topics, apparatus and labs, and some physics education research.",
       "review": "Peer reviewed",
       "access": "hybrid",
-      "fees": "None to publish; optional open-access fee"
+      "fees": "None under the standard license; open access optional for $3,800",
+      "author_fee": false,
+      "checked": "2026-11"
     },
     {
       "name": "Physics Education Research Conference (PERC) Proceedings",
@@ -263,9 +282,10 @@
       "levels": ["K-12", "Undergraduate", "Graduate"],
       "scope": "Short papers tied to posters at the summer PER Conference. Preliminary results and work in progress are welcome.",
       "review": "Peer reviewed (double-anonymous)",
+      "first_timer": true,
       "access": "proceedings",
       "fees": "None beyond conference registration; papers are CC BY",
-      "first_timer": true,
+      "author_fee": false,
       "checked": "2026-11"
     },
     {
@@ -291,9 +311,10 @@
       "levels": ["K-12", "Undergraduate", "Graduate"],
       "scope": "Teaching statistics and data science at all levels: research, datasets and stories for class, and teaching notes.",
       "review": "Peer reviewed",
+      "first_timer": true,
       "access": "diamond",
       "fees": "None to submit or publish",
-      "first_timer": true,
+      "author_fee": false,
       "checked": "2026-11"
     },
     {
@@ -319,7 +340,9 @@
       "scope": "Rigorous engineering education research grounded in theory. Not the place for a first classroom report; start with ASEE proceedings.",
       "review": "Peer reviewed",
       "access": "hybrid",
-      "fees": "None to publish; optional open-access fee"
+      "fees": "None if you transfer copyright to ASEE; open access optional for a fee",
+      "author_fee": false,
+      "checked": "2026-11"
     },
     {
       "name": "ASEE Annual Conference proceedings (ASEE PEER)",
@@ -330,9 +353,10 @@
       "levels": ["K-12", "Undergraduate", "Graduate"],
       "scope": "Full papers on any part of engineering education, reviewed by the ASEE division you submit to. Work-in-progress papers are a common first step.",
       "review": "Peer reviewed (by division)",
+      "first_timer": true,
       "access": "proceedings",
       "fees": "None beyond conference registration; free to read",
-      "first_timer": true,
+      "author_fee": false,
       "checked": "2026-11"
     },
     {
@@ -344,9 +368,11 @@
       "levels": ["K-12", "Undergraduate"],
       "scope": "Computing education: experience reports, research papers, and curricular papers. Experience reports are a good fit for a first classroom innovation.",
       "review": "Peer reviewed",
+      "first_timer": true,
       "access": "proceedings",
-      "fees": "None beyond conference registration; check ACM's current open-access terms",
-      "first_timer": true
+      "fees": "No charge if any author's institution is in ACM Open; otherwise an article processing charge (2026 rates: $250 with an ACM or SIG member as author, $350 without; hardship waivers available). Plus conference registration.",
+      "author_fee": true,
+      "checked": "2026-11"
     },
     {
       "name": "MedEdPORTAL",
@@ -357,9 +383,10 @@
       "levels": ["Graduate"],
       "scope": "Complete, ready-to-use teaching materials for the health professions: curricula, cases, simulations, and assessments, with evidence from their use.",
       "review": "Peer reviewed",
+      "first_timer": true,
       "access": "diamond",
       "fees": "None",
-      "first_timer": true,
+      "author_fee": false,
       "checked": "2026-11"
     },
     {
@@ -385,9 +412,11 @@
       "levels": ["Undergraduate"],
       "scope": "Teaching and learning in college agriculture, natural resources, and related fields.",
       "review": "Peer reviewed",
+      "first_timer": true,
       "access": "subscription",
-      "fees": "Check the journal's author page",
-      "first_timer": true
+      "fees": "Free for NACTA members (2026 dues: $125 a year, $35 for graduate students)",
+      "author_fee": true,
+      "checked": "2026-11"
     },
     {
       "name": "Natural Sciences Education",
@@ -399,7 +428,7 @@
       "scope": "Teaching in agronomy, crop, soil, and environmental sciences, from K-12 outreach to graduate courses.",
       "review": "Peer reviewed",
       "access": "hybrid",
-      "fees": "Check the journal's author page"
+      "fees": "No page charges in 2024; open access optional for a fee ($1,400 in 2024)"
     },
     {
       "name": "Science Scope, The Science Teacher, and Science and Children",
@@ -411,9 +440,11 @@
       "levels": ["K-12"],
       "scope": "Classroom-tested lessons and ideas for elementary (Science and Children), middle (Science Scope), and high school (The Science Teacher) science.",
       "review": "Peer reviewed",
-      "access": "subscription",
-      "fees": "None to publish",
-      "first_timer": true
+      "first_timer": true,
+      "access": "hybrid",
+      "fees": "None to publish; optional open-access fee",
+      "author_fee": false,
+      "checked": "2026-11"
     }
   ]
 }

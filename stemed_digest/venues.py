@@ -55,6 +55,12 @@ def check(data: dict) -> None:
             problems.append(f"{name}: url must start with https://")
         if "checked" in v and not re.fullmatch(r"\d{4}-\d{2}", v["checked"]):
             problems.append(f"{name}: checked must be YYYY-MM")
+        if "author_fee" in v and not isinstance(v["author_fee"], bool):
+            problems.append(f"{name}: author_fee must be true or false")
+        if v.get("author_fee") is False and "checked" not in v:
+            problems.append(f"{name}: author_fee false (no author fee) needs a checked date")
+        if v.get("access") == "gold" and v.get("author_fee") is False:
+            problems.append(f"{name}: gold open access means authors pay a fee; use diamond if it is free")
     if problems:
         raise ValueError("config/venues.json: " + "; ".join(problems))
 
