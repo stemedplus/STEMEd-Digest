@@ -133,8 +133,9 @@
       "review": "Peer reviewed",
       "first_timer": true,
       "access": "gold",
-      "fees": "Publication fee, reported as $400; confirm on CourseSource's For Authors page",
-      "author_fee": true
+      "fees": "$400 per article; a reduced $200 fee or a full waiver can be requested at submission",
+      "author_fee": true,
+      "checked": "2026-11"
     },
     {
       "name": "The American Biology Teacher",
