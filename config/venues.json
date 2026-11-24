@@ -446,6 +446,34 @@
       "fees": "None to publish; optional open-access fee",
       "author_fee": false,
       "checked": "2026-11"
+    },
+    {
+      "name": "The Transdisciplinary STEAM+ Journal",
+      "url": "https://scholarship.claremont.edu/steam/",
+      "publisher": "Claremont Colleges Library (Scholarship@Claremont)",
+      "disciplines": ["STEAM: Arts+STEM"],
+      "kind": "education",
+      "levels": ["K-12", "Undergraduate", "Graduate"],
+      "scope": "Arts integration across STEM, the social sciences, and the humanities. Takes academic articles (empirical or theoretical, including arts-based research), field notes that share a reproducible arts-integration lesson or project plan, short reflections, artwork, and book or film reviews. Anyone may submit. Relaunched in 2025 from The STEAM Journal (2013).",
+      "review": "Editorial review",
+      "first_timer": true,
+      "access": "diamond",
+      "fees": "None listed on the journal's policies page",
+      "checked": "2026-11"
+    },
+    {
+      "name": "Leonardo",
+      "url": "https://leonardo.info/author-information",
+      "publisher": "Leonardo/ISAST and the MIT Press",
+      "disciplines": ["STEAM: Arts+STEM"],
+      "kind": "journal",
+      "sections": ["research"],
+      "levels": ["Undergraduate", "Graduate"],
+      "scope": "The long-running journal of art, science, and technology: contemporary science and technology in the arts and music, and the arts' influence on science. Takes articles, artist statements, and work in its special sections. Expect a long wait to print for full-length articles.",
+      "review": "Peer reviewed",
+      "access": "hybrid",
+      "fees": "None to submit; open access is optional through the MIT Press",
+      "checked": "2026-11"
     }
   ]
 }
